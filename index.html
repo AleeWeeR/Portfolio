@@ -417,133 +417,7 @@
             transform: translateX(-50%);
             border-radius: 2px;
         }
-
-        .floating-hexagon {
-            width: 35px;
-            height: 40px;
-            top: 50%;
-            left: 10%;
-            animation: float 16s ease-in-out infinite, rotate 22s linear infinite;
-            filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.4));
-            position: absolute;
-            opacity: 0.5;
-        }
-
-        .floating-hexagon::before {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 0;
-            border-left: 17.5px solid transparent;
-            border-right: 17.5px solid transparent;
-            border-bottom: 10px solid var(--accent-secondary);
-            top: 0;
-            left: 0;
-        }
-
-        .floating-hexagon::after {
-            content: '';
-            position: absolute;
-            width: 35px;
-            height: 20px;
-            background: var(--accent-secondary);
-            top: 10px;
-            left: 0;
-        }
-
-        .floating-star {
-            width: 30px;
-            height: 30px;
-            top: 80%;
-            right: 25%;
-            animation: float 13s ease-in-out infinite, twinkle 3s ease-in-out infinite;
-            filter: drop-shadow(0 0 10px rgba(192, 132, 252, 0.6));
-            position: absolute;
-            opacity: 0.6;
-        }
-
-        .floating-star::before,
-        .floating-star::after {
-            content: '';
-            position: absolute;
-            background: linear-gradient(135deg, #a855f7, #c084fc);
-        }
-
-        .floating-star::before {
-            width: 100%;
-            height: 4px;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            border-radius: 2px;
-        }
-
-        .floating-star::after {
-            width: 4px;
-            height: 100%;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 2px;
-        }
-
-        @keyframes twinkle {
-            0%, 100% {
-                opacity: 0.6;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.3);
-            }
-        }
-
-        .floating-ring {
-            width: 45px;
-            height: 45px;
-            border: 3px solid transparent;
-            background: linear-gradient(var(--bg), var(--bg)) padding-box,
-                        linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7) border-box;
-            border-radius: 50%;
-            top: 35%;
-            right: 40%;
-            animation: float 19s ease-in-out infinite, ring-spin 8s linear infinite;
-            filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.5));
-            position: absolute;
-            opacity: 0.5;
-        }
-
-        @keyframes ring-spin {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .floating-diamond {
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, #8b5cf6, #a855f7);
-            top: 45%;
-            left: 80%;
-            animation: float 17s ease-in-out infinite, diamond-rotate 15s ease-in-out infinite;
-            filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.5));
-            position: absolute;
-            opacity: 0.6;
-            transform: rotate(45deg);
-        }
-
-        @keyframes diamond-rotate {
-            0%, 100% {
-                transform: rotate(45deg);
-            }
-            50% {
-                transform: rotate(225deg);
-            }
-        }
-
+        
         @keyframes float {
             0%, 100% {
                 transform: translateY(0) translateX(0);
@@ -698,9 +572,7 @@
             position: fixed;
             width: 40px;
             height: 40px;
-            border: 2px solid transparent;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6) padding-box,
-                        linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7) border-box;
+            border: 2px solid var(--accent);
             border-radius: 50%;
             left: 0;
             top: 0;
@@ -709,44 +581,21 @@
             transition: all 0.15s ease-out;
             z-index: 9999;
             opacity: 0;
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
-        }
-
-        .cursor::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
-            z-index: -1;
-            filter: blur(4px);
-            opacity: 0.6;
-            animation: cursor-pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes cursor-pulse {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 0.6;
-            }
-            50% {
-                transform: scale(1.2);
-                opacity: 0.3;
-            }
+            mix-blend-mode: difference;
         }
 
         .cursor.cursor-hover {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #8b5cf6, #a855f7, #c084fc);
-            box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--accent-secondary);
         }
 
         .cursor-dot {
             position: fixed;
-            width: 8px;
-            height: 8px;
-            background: linear-gradient(135deg, #a855f7, #c084fc);
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
             border-radius: 50%;
             left: 0;
             top: 0;
@@ -754,18 +603,14 @@
             transform: translate(-50%, -50%);
             z-index: 9999;
             opacity: 0;
-            box-shadow: 0 0 10px rgba(168, 85, 247, 0.8);
+            mix-blend-mode: difference;
         }
 
         .mouse-glow {
             position: fixed;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle,
-                rgba(99, 102, 241, 0.2) 0%,
-                rgba(139, 92, 246, 0.15) 30%,
-                rgba(168, 85, 247, 0.1) 50%,
-                transparent 70%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
             left: 0;
@@ -775,66 +620,8 @@
             transition: opacity 0.3s ease;
             opacity: 0;
             mix-blend-mode: screen;
-            filter: blur(20px);
-            animation: glow-pulse 3s ease-in-out infinite;
         }
-
-        @keyframes glow-pulse {
-            0%, 100% {
-                transform: translate(-50%, -50%) scale(1);
-            }
-            50% {
-                transform: translate(-50%, -50%) scale(1.1);
-            }
-        }
-
-        /* Click Ripple Effect */
-        .click-ripple {
-            position: fixed;
-            border-radius: 50%;
-            border: 2px solid #8b5cf6;
-            pointer-events: none;
-            z-index: 9998;
-            animation: ripple-expand 1s ease-out forwards;
-        }
-
-        @keyframes ripple-expand {
-            0% {
-                width: 20px;
-                height: 20px;
-                opacity: 1;
-            }
-            100% {
-                width: 300px;
-                height: 300px;
-                opacity: 0;
-            }
-        }
-
-        /* Sparkle Trail */
-        .sparkle {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            background: linear-gradient(135deg, #a855f7, #c084fc);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9997;
-            animation: sparkle-fade 1.5s ease-out forwards;
-            box-shadow: 0 0 10px rgba(168, 85, 247, 0.8);
-        }
-
-        @keyframes sparkle-fade {
-            0% {
-                opacity: 1;
-                transform: scale(1) translate(0, 0);
-            }
-            100% {
-                opacity: 0;
-                transform: scale(0) translate(var(--tx), var(--ty));
-            }
-        }
-
+        
         /* About Section */
         .about {
             background: var(--bg-alt);
@@ -1655,10 +1442,6 @@
             <div class="floating-element floating-line"></div>
             <div class="floating-element floating-dot"></div>
             <div class="floating-element floating-plus"></div>
-            <div class="floating-element floating-hexagon"></div>
-            <div class="floating-element floating-star"></div>
-            <div class="floating-element floating-ring"></div>
-            <div class="floating-element floating-diamond"></div>
         </div>
         <div class="container">
             <div class="hero-content">
@@ -1967,57 +1750,10 @@
             }
             animateGlow();
 
-            let sparkleInterval;
             document.addEventListener('mousemove', function(e) {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
                 mouseGlow.style.opacity = '1';
-
-                // Create sparkle trail (throttled)
-                if (!sparkleInterval) {
-                    createSparkle(e.clientX, e.clientY);
-                    sparkleInterval = setTimeout(() => {
-                        sparkleInterval = null;
-                    }, 100);
-                }
-            });
-
-            // Create sparkle effect
-            function createSparkle(x, y) {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.style.left = x + 'px';
-                sparkle.style.top = y + 'px';
-                sparkle.style.setProperty('--tx', (Math.random() - 0.5) * 50 + 'px');
-                sparkle.style.setProperty('--ty', (Math.random() - 0.5) * 50 + 'px');
-                document.body.appendChild(sparkle);
-
-                setTimeout(() => {
-                    sparkle.remove();
-                }, 1500);
-            }
-
-            // Click ripple effect
-            document.addEventListener('click', function(e) {
-                const ripple = document.createElement('div');
-                ripple.className = 'click-ripple';
-                ripple.style.left = (e.clientX - 10) + 'px';
-                ripple.style.top = (e.clientY - 10) + 'px';
-                document.body.appendChild(ripple);
-
-                // Create multiple sparkles on click
-                for (let i = 0; i < 8; i++) {
-                    setTimeout(() => {
-                        createSparkle(
-                            e.clientX + (Math.random() - 0.5) * 20,
-                            e.clientY + (Math.random() - 0.5) * 20
-                        );
-                    }, i * 50);
-                }
-
-                setTimeout(() => {
-                    ripple.remove();
-                }, 1000);
             });
 
             // Header scroll effect
@@ -2076,20 +1812,10 @@
                 }
 
                 draw() {
-                    // Create gradient for each particle
-                    const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
-                    gradient.addColorStop(0, `rgba(168, 85, 247, ${this.opacity})`);
-                    gradient.addColorStop(0.5, `rgba(139, 92, 246, ${this.opacity})`);
-                    gradient.addColorStop(1, `rgba(99, 102, 241, ${this.opacity * 0.5})`);
-
-                    ctx.fillStyle = gradient;
+                    ctx.fillStyle = `rgba(99, 102, 241, ${this.opacity})`;
                     ctx.beginPath();
                     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                     ctx.fill();
-
-                    // Add glow effect
-                    ctx.shadowBlur = 10;
-                    ctx.shadowColor = `rgba(139, 92, 246, ${this.opacity * 0.5})`;
                 }
             }
 
@@ -2115,18 +1841,8 @@
                         const distance = Math.sqrt(dx * dx + dy * dy);
 
                         if (distance < 120) {
-                            const gradient = ctx.createLinearGradient(
-                                particlesArray[i].x, particlesArray[i].y,
-                                particlesArray[j].x, particlesArray[j].y
-                            );
-                            gradient.addColorStop(0, `rgba(168, 85, 247, ${0.3 - distance / 600})`);
-                            gradient.addColorStop(0.5, `rgba(139, 92, 246, ${0.3 - distance / 600})`);
-                            gradient.addColorStop(1, `rgba(99, 102, 241, ${0.3 - distance / 600})`);
-
-                            ctx.strokeStyle = gradient;
-                            ctx.lineWidth = 1.5;
-                            ctx.shadowBlur = 5;
-                            ctx.shadowColor = `rgba(139, 92, 246, ${0.2 - distance / 600})`;
+                            ctx.strokeStyle = `rgba(99, 102, 241, ${0.2 - distance / 600})`;
+                            ctx.lineWidth = 1;
                             ctx.beginPath();
                             ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
                             ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
@@ -2145,14 +1861,14 @@
             particlesJS('particles-js', {
                 "particles": {
                     "number": {
-                        "value": 60,
+                        "value": 50,
                         "density": {
                             "enable": true,
                             "value_area": 800
                         }
                     },
                     "color": {
-                        "value": ["#6366f1", "#8b5cf6", "#a855f7", "#c084fc"]
+                        "value": "#2563eb"
                     },
                     "shape": {
                         "type": "circle",
@@ -2187,9 +1903,9 @@
                     "line_linked": {
                         "enable": true,
                         "distance": 170,
-                        "color": "#8b5cf6",
-                        "opacity": 0.4,
-                        "width": 1.5
+                        "color": "#2563eb",
+                        "opacity": 0.3,
+                        "width": 1.2
                     },
                     "move": {
                         "enable": true,
