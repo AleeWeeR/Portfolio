@@ -698,9 +698,8 @@
             position: fixed;
             width: 40px;
             height: 40px;
-            border: 2px solid transparent;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6) padding-box,
-                        linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7) border-box;
+            border: 3px solid;
+            border-image: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7) 1;
             border-radius: 50%;
             left: 0;
             top: 0;
@@ -709,37 +708,38 @@
             transition: all 0.15s ease-out;
             z-index: 9999;
             opacity: 0;
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+            background: transparent;
         }
 
         .cursor::before {
             content: '';
             position: absolute;
-            inset: -2px;
+            inset: -8px;
             border-radius: 50%;
+            border: 2px solid transparent;
             background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
-            z-index: -1;
-            filter: blur(4px);
-            opacity: 0.6;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.3;
             animation: cursor-pulse 2s ease-in-out infinite;
         }
 
         @keyframes cursor-pulse {
             0%, 100% {
                 transform: scale(1);
-                opacity: 0.6;
+                opacity: 0.3;
             }
             50% {
-                transform: scale(1.2);
-                opacity: 0.3;
+                transform: scale(1.4);
+                opacity: 0.1;
             }
         }
 
         .cursor.cursor-hover {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #8b5cf6, #a855f7, #c084fc);
-            box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
+            border-width: 3px;
         }
 
         .cursor-dot {
@@ -757,35 +757,50 @@
             box-shadow: 0 0 10px rgba(168, 85, 247, 0.8);
         }
 
-        .mouse-glow {
+        /* Dim Overlay */
+        .dim-overlay {
             position: fixed;
-            width: 500px;
-            height: 500px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            pointer-events: none;
+            z-index: 9990;
+            transition: opacity 0.3s ease;
+        }
+
+        [data-theme="dark"] .dim-overlay {
+            background: rgba(0, 0, 0, 0.85);
+        }
+
+        /* Spotlight Effect */
+        .spotlight {
+            position: fixed;
+            width: 600px;
+            height: 600px;
             background: radial-gradient(circle,
-                rgba(99, 102, 241, 0.2) 0%,
-                rgba(139, 92, 246, 0.15) 30%,
-                rgba(168, 85, 247, 0.1) 50%,
+                rgba(255, 255, 255, 0.15) 0%,
+                rgba(255, 255, 255, 0.1) 20%,
+                rgba(255, 255, 255, 0.05) 40%,
                 transparent 70%);
             border-radius: 50%;
             pointer-events: none;
             left: 0;
             top: 0;
             transform: translate(-50%, -50%);
-            z-index: 0;
-            transition: opacity 0.3s ease;
-            opacity: 0;
-            mix-blend-mode: screen;
-            filter: blur(20px);
-            animation: glow-pulse 3s ease-in-out infinite;
+            z-index: 9991;
+            mix-blend-mode: lighten;
+            filter: blur(10px);
         }
 
-        @keyframes glow-pulse {
-            0%, 100% {
-                transform: translate(-50%, -50%) scale(1);
-            }
-            50% {
-                transform: translate(-50%, -50%) scale(1.1);
-            }
+        [data-theme="dark"] .spotlight {
+            background: radial-gradient(circle,
+                rgba(139, 92, 246, 0.3) 0%,
+                rgba(99, 102, 241, 0.2) 20%,
+                rgba(168, 85, 247, 0.1) 40%,
+                transparent 70%);
+            mix-blend-mode: screen;
         }
 
         /* Click Ripple Effect */
@@ -808,30 +823,6 @@
                 width: 300px;
                 height: 300px;
                 opacity: 0;
-            }
-        }
-
-        /* Sparkle Trail */
-        .sparkle {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            background: linear-gradient(135deg, #a855f7, #c084fc);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9997;
-            animation: sparkle-fade 1.5s ease-out forwards;
-            box-shadow: 0 0 10px rgba(168, 85, 247, 0.8);
-        }
-
-        @keyframes sparkle-fade {
-            0% {
-                opacity: 1;
-                transform: scale(1) translate(0, 0);
-            }
-            100% {
-                opacity: 0;
-                transform: scale(0) translate(var(--tx), var(--ty));
             }
         }
 
@@ -1615,9 +1606,10 @@
     </style>
 </head>
 <body>
+    <div class="dim-overlay"></div>
+    <div class="spotlight"></div>
     <div class="cursor"></div>
     <div class="cursor-dot"></div>
-    <div class="mouse-glow"></div>
 
     <header class="header">
         <div class="container">
@@ -1951,51 +1943,26 @@
             // Initialize GSAP
             gsap.registerPlugin(ScrollTrigger);
 
-            // Mouse glow effect
-            const mouseGlow = document.querySelector('.mouse-glow');
+            // Spotlight effect
+            const spotlight = document.querySelector('.spotlight');
             let mouseX = 0;
             let mouseY = 0;
-            let glowX = 0;
-            let glowY = 0;
+            let spotlightX = 0;
+            let spotlightY = 0;
 
-            function animateGlow() {
-                glowX += (mouseX - glowX) * 0.1;
-                glowY += (mouseY - glowY) * 0.1;
-                mouseGlow.style.left = glowX + 'px';
-                mouseGlow.style.top = glowY + 'px';
-                requestAnimationFrame(animateGlow);
+            function animateSpotlight() {
+                spotlightX += (mouseX - spotlightX) * 0.12;
+                spotlightY += (mouseY - spotlightY) * 0.12;
+                spotlight.style.left = spotlightX + 'px';
+                spotlight.style.top = spotlightY + 'px';
+                requestAnimationFrame(animateSpotlight);
             }
-            animateGlow();
+            animateSpotlight();
 
-            let sparkleInterval;
             document.addEventListener('mousemove', function(e) {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
-                mouseGlow.style.opacity = '1';
-
-                // Create sparkle trail (throttled)
-                if (!sparkleInterval) {
-                    createSparkle(e.clientX, e.clientY);
-                    sparkleInterval = setTimeout(() => {
-                        sparkleInterval = null;
-                    }, 100);
-                }
             });
-
-            // Create sparkle effect
-            function createSparkle(x, y) {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.style.left = x + 'px';
-                sparkle.style.top = y + 'px';
-                sparkle.style.setProperty('--tx', (Math.random() - 0.5) * 50 + 'px');
-                sparkle.style.setProperty('--ty', (Math.random() - 0.5) * 50 + 'px');
-                document.body.appendChild(sparkle);
-
-                setTimeout(() => {
-                    sparkle.remove();
-                }, 1500);
-            }
 
             // Click ripple effect
             document.addEventListener('click', function(e) {
@@ -2004,16 +1971,6 @@
                 ripple.style.left = (e.clientX - 10) + 'px';
                 ripple.style.top = (e.clientY - 10) + 'px';
                 document.body.appendChild(ripple);
-
-                // Create multiple sparkles on click
-                for (let i = 0; i < 8; i++) {
-                    setTimeout(() => {
-                        createSparkle(
-                            e.clientX + (Math.random() - 0.5) * 20,
-                            e.clientY + (Math.random() - 0.5) * 20
-                        );
-                    }, i * 50);
-                }
 
                 setTimeout(() => {
                     ripple.remove();
