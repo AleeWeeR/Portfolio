@@ -1508,21 +1508,33 @@
                     floating3d.classList.remove('dragging');
                 }, 100);
 
-                // Set transition first
-                floating3d.style.transition = 'left 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55), top 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55), right 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.3s ease, transform 0.3s ease';
+                // Calculate target position in left coordinates
+                const cubeWidth = floating3d.offsetWidth;
+                const cubeWidthPercent = (cubeWidth / window.innerWidth) * 100;
+                const targetLeft = 100 - currentX - cubeWidthPercent;
 
-                // Use requestAnimationFrame to ensure transition is applied before changing properties
+                // Set transition for smooth travel-back
+                floating3d.style.transition = 'left 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55), top 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.3s ease, transform 0.3s ease';
+
+                // Use requestAnimationFrame to ensure transition is applied
                 requestAnimationFrame(() => {
                     requestAnimationFrame(() => {
-                        floating3d.style.left = 'auto';
-                        floating3d.style.right = `${currentX}%`;
+                        // Keep using left positioning for smooth travel
+                        floating3d.style.left = `${targetLeft}%`;
                         floating3d.style.top = `${currentY}%`;
                     });
                 });
 
-                // Reset transition after animation completes
+                // After animation completes, switch back to right positioning
                 setTimeout(() => {
-                    floating3d.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    floating3d.style.transition = 'none';
+                    floating3d.style.left = 'auto';
+                    floating3d.style.right = `${currentX}%`;
+
+                    // Restore normal transitions
+                    setTimeout(() => {
+                        floating3d.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    }, 50);
                 }, 1200);
             }
         });
