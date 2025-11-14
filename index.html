@@ -235,8 +235,8 @@
         .reveal-box {
             width: 100%;
             height: 100%;
-            background: rgba(31, 31, 31, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(31, 31, 31, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.03);
             border-radius: 24px;
             display: flex;
             align-items: center;
@@ -244,13 +244,13 @@
             position: relative;
             overflow: hidden;
             cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(5px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(3px);
         }
 
         [data-theme="light"] .reveal-box {
-            background: rgba(250, 250, 250, 0.3);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            background: rgba(250, 250, 250, 0.15);
+            border: 1px solid rgba(0, 0, 0, 0.03);
         }
 
         .reveal-box::before {
@@ -267,21 +267,29 @@
             );
             animation: rotate 4s linear infinite;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.6s ease;
         }
 
         .reveal-box:hover {
-            background: rgba(31, 31, 31, 0.5);
-            border-color: rgba(0, 212, 255, 0.3);
+            background: rgba(31, 31, 31, 0.3);
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow:
+                0 0 40px rgba(0, 212, 255, 0.4),
+                0 0 80px rgba(112, 0, 255, 0.2),
+                inset 0 0 40px rgba(0, 212, 255, 0.1);
         }
 
         [data-theme="light"] .reveal-box:hover {
-            background: rgba(250, 250, 250, 0.5);
-            border-color: rgba(0, 153, 204, 0.3);
+            background: rgba(250, 250, 250, 0.3);
+            border-color: rgba(0, 153, 204, 0.4);
+            box-shadow:
+                0 0 40px rgba(0, 153, 204, 0.4),
+                0 0 80px rgba(85, 0, 204, 0.2),
+                inset 0 0 40px rgba(0, 153, 204, 0.1);
         }
 
         .reveal-box:hover::before {
-            opacity: 0.2;
+            opacity: 0.3;
         }
 
         .reveal-text {
@@ -323,22 +331,6 @@
             height: 100%;
             object-fit: cover;
             border-radius: 24px;
-        }
-
-        .reveal-message {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1rem;
-            font-weight: 600;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-align: center;
-            white-space: nowrap;
-            padding: 0 1rem;
         }
 
         .hero-title {
@@ -845,50 +837,50 @@
         /* 3D Floating Object */
         .floating-3d {
             position: fixed;
-            right: 5%;
-            top: 50%;
-            width: 150px;
-            height: 150px;
+            right: 8%;
+            top: 40%;
+            width: 100px;
+            height: 100px;
             pointer-events: none;
             z-index: 100;
             transform-style: preserve-3d;
-            transition: transform 0.05s ease-out;
+            opacity: 0.4;
             perspective: 1000px;
         }
 
         @media (max-width: 1440px) {
             .floating-3d {
-                width: 120px;
-                height: 120px;
+                width: 80px;
+                height: 80px;
             }
             .shape-face {
-                width: 120px !important;
-                height: 120px !important;
+                width: 80px !important;
+                height: 80px !important;
             }
-            .shape-face:nth-child(1) { transform: translateZ(60px); }
-            .shape-face:nth-child(2) { transform: rotateY(180deg) translateZ(60px); }
-            .shape-face:nth-child(3) { transform: rotateY(90deg) translateZ(60px); }
-            .shape-face:nth-child(4) { transform: rotateY(-90deg) translateZ(60px); }
-            .shape-face:nth-child(5) { transform: rotateX(90deg) translateZ(60px); }
-            .shape-face:nth-child(6) { transform: rotateX(-90deg) translateZ(60px); }
+            .shape-face:nth-child(1) { transform: translateZ(40px); }
+            .shape-face:nth-child(2) { transform: rotateY(180deg) translateZ(40px); }
+            .shape-face:nth-child(3) { transform: rotateY(90deg) translateZ(40px); }
+            .shape-face:nth-child(4) { transform: rotateY(-90deg) translateZ(40px); }
+            .shape-face:nth-child(5) { transform: rotateX(90deg) translateZ(40px); }
+            .shape-face:nth-child(6) { transform: rotateX(-90deg) translateZ(40px); }
         }
 
         @media (max-width: 1024px) {
             .floating-3d {
-                width: 100px;
-                height: 100px;
-                right: 3%;
+                width: 60px;
+                height: 60px;
+                right: 5%;
             }
             .shape-face {
-                width: 100px !important;
-                height: 100px !important;
+                width: 60px !important;
+                height: 60px !important;
             }
-            .shape-face:nth-child(1) { transform: translateZ(50px); }
-            .shape-face:nth-child(2) { transform: rotateY(180deg) translateZ(50px); }
-            .shape-face:nth-child(3) { transform: rotateY(90deg) translateZ(50px); }
-            .shape-face:nth-child(4) { transform: rotateY(-90deg) translateZ(50px); }
-            .shape-face:nth-child(5) { transform: rotateX(90deg) translateZ(50px); }
-            .shape-face:nth-child(6) { transform: rotateX(-90deg) translateZ(50px); }
+            .shape-face:nth-child(1) { transform: translateZ(30px); }
+            .shape-face:nth-child(2) { transform: rotateY(180deg) translateZ(30px); }
+            .shape-face:nth-child(3) { transform: rotateY(90deg) translateZ(30px); }
+            .shape-face:nth-child(4) { transform: rotateY(-90deg) translateZ(30px); }
+            .shape-face:nth-child(5) { transform: rotateX(90deg) translateZ(30px); }
+            .shape-face:nth-child(6) { transform: rotateX(-90deg) translateZ(30px); }
         }
 
         .floating-shape {
@@ -908,39 +900,40 @@
 
         .shape-face {
             position: absolute;
-            width: 150px;
-            height: 150px;
+            width: 100px;
+            height: 100px;
             background: linear-gradient(135deg,
-                rgba(0, 212, 255, 0.15) 0%,
-                rgba(112, 0, 255, 0.15) 100%);
-            backdrop-filter: blur(15px);
+                rgba(0, 212, 255, 0.1) 0%,
+                rgba(112, 0, 255, 0.1) 100%);
+            backdrop-filter: blur(10px);
             box-shadow:
-                0 0 20px rgba(0, 212, 255, 0.3),
-                inset 0 0 20px rgba(255, 255, 255, 0.05);
+                0 0 15px rgba(0, 212, 255, 0.2),
+                inset 0 0 15px rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
         }
 
         .shape-face:nth-child(1) {
-            transform: translateZ(75px);
+            transform: translateZ(50px);
         }
 
         .shape-face:nth-child(2) {
-            transform: rotateY(180deg) translateZ(75px);
+            transform: rotateY(180deg) translateZ(50px);
         }
 
         .shape-face:nth-child(3) {
-            transform: rotateY(90deg) translateZ(75px);
+            transform: rotateY(90deg) translateZ(50px);
         }
 
         .shape-face:nth-child(4) {
-            transform: rotateY(-90deg) translateZ(75px);
+            transform: rotateY(-90deg) translateZ(50px);
         }
 
         .shape-face:nth-child(5) {
-            transform: rotateX(90deg) translateZ(75px);
+            transform: rotateX(90deg) translateZ(50px);
         }
 
         .shape-face:nth-child(6) {
-            transform: rotateX(-90deg) translateZ(75px);
+            transform: rotateX(-90deg) translateZ(50px);
         }
 
         /* Responsive */
@@ -1056,7 +1049,6 @@
                     <div class="reveal-text">Hover to reveal</div>
                     <div class="reveal-content">
                         <img src="src/me.jpg" alt="Alisher Kholmirzaev" class="reveal-photo">
-                        <div class="reveal-message">That's me!</div>
                     </div>
                 </div>
             </div>
@@ -1351,38 +1343,6 @@
             });
         });
 
-        // Card tilt effect
-        document.querySelectorAll('.bento-item, .project-card, .skill-card').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-
-                const rotateX = (y - centerY) / 20;
-                const rotateY = (centerX - x) / 20;
-
-                gsap.to(card, {
-                    rotateX: rotateX,
-                    rotateY: rotateY,
-                    duration: 0.3,
-                    ease: 'power2.out',
-                    transformPerspective: 1000
-                });
-            });
-
-            card.addEventListener('mouseleave', () => {
-                gsap.to(card, {
-                    rotateX: 0,
-                    rotateY: 0,
-                    duration: 0.5,
-                    ease: 'power2.out'
-                });
-            });
-        });
-
         // Smooth horizontal scroll for timeline
         const timelineScroll = document.querySelector('.timeline-scroll');
         if (timelineScroll) {
@@ -1435,30 +1395,32 @@
             }
         }
 
-        // 3D Floating Object - Scroll Follow
+        // 3D Floating Object - Smooth parallax
         const floating3d = document.getElementById('floating3d');
         let scrollProgress = 0;
+        let targetY = 40;
+        let currentY = 40;
 
+        // Smooth scroll-based movement
         window.addEventListener('scroll', () => {
             const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
             scrollProgress = window.scrollY / maxScroll;
 
-            // Move the object vertically based on scroll
-            const yPos = 20 + (scrollProgress * 60); // Moves from 20% to 80% of viewport
-            floating3d.style.top = `${yPos}%`;
-
-            // Add subtle rotation based on scroll
-            const rotation = scrollProgress * 360;
-            floating3d.style.transform = `translateY(-50%) rotateZ(${rotation}deg)`;
+            // Gentle vertical movement (stays mostly centered)
+            targetY = 35 + (scrollProgress * 30); // Moves from 35% to 65% subtly
         });
 
-        // Add mouse parallax to 3D object
-        document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 20;
-            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+        // Smooth animation loop
+        function animateFloating() {
+            // Lerp for smooth movement
+            currentY += (targetY - currentY) * 0.05;
 
-            floating3d.style.transform = `translateY(-50%) rotateZ(${scrollProgress * 360}deg) translateX(${x}px) translateY(${y}px)`;
-        });
+            floating3d.style.top = `${currentY}%`;
+
+            requestAnimationFrame(animateFloating);
+        }
+
+        animateFloating();
     </script>
 </body>
 </html>
