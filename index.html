@@ -272,24 +272,26 @@
 
         .reveal-box:hover {
             background: rgba(31, 31, 31, 0.3);
-            border-color: rgba(0, 212, 255, 0.4);
+            border-color: rgba(0, 212, 255, 0.6);
             box-shadow:
-                0 0 40px rgba(0, 212, 255, 0.4),
-                0 0 80px rgba(112, 0, 255, 0.2),
-                inset 0 0 40px rgba(0, 212, 255, 0.1);
+                0 0 50px rgba(0, 212, 255, 0.7),
+                0 0 100px rgba(112, 0, 255, 0.5),
+                inset 0 0 60px rgba(0, 212, 255, 0.2),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
         }
 
         [data-theme="light"] .reveal-box:hover {
             background: rgba(250, 250, 250, 0.3);
-            border-color: rgba(0, 153, 204, 0.4);
+            border-color: rgba(0, 153, 204, 0.6);
             box-shadow:
-                0 0 40px rgba(0, 153, 204, 0.4),
-                0 0 80px rgba(85, 0, 204, 0.2),
-                inset 0 0 40px rgba(0, 153, 204, 0.1);
+                0 0 50px rgba(0, 153, 204, 0.7),
+                0 0 100px rgba(85, 0, 204, 0.5),
+                inset 0 0 60px rgba(0, 153, 204, 0.2),
+                inset 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
         .reveal-box:hover::before {
-            opacity: 0.3;
+            opacity: 0.4;
         }
 
         .reveal-text {
@@ -331,6 +333,12 @@
             height: 100%;
             object-fit: cover;
             border-radius: 24px;
+            filter: blur(0);
+            transition: filter 0.5s ease;
+        }
+
+        .reveal-box:hover .reveal-photo {
+            filter: blur(0) drop-shadow(0 0 20px rgba(0, 212, 255, 0.6)) drop-shadow(0 0 40px rgba(112, 0, 255, 0.4));
         }
 
         .hero-title {
@@ -504,7 +512,10 @@
         .bento-item:hover {
             transform: translateY(-8px);
             border-color: var(--accent);
-            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.15);
+            box-shadow:
+                0 0 30px rgba(0, 212, 255, 0.5),
+                0 0 60px rgba(112, 0, 255, 0.3),
+                0 20px 60px rgba(0, 212, 255, 0.2);
         }
 
         .bento-item:hover::before {
@@ -564,6 +575,9 @@
         .skill-card:hover {
             transform: translateY(-5px) rotate(-1deg);
             border-color: var(--accent);
+            box-shadow:
+                0 0 25px rgba(0, 212, 255, 0.5),
+                0 0 50px rgba(112, 0, 255, 0.3);
         }
 
         .skill-card h4 {
@@ -630,7 +644,7 @@
             width: 4px;
             height: 100%;
             background: var(--gradient);
-            border-radius: 20px 0 0 20px;
+            border-radius: 0;
         }
 
         .timeline-date {
@@ -684,7 +698,10 @@
         .project-card:hover {
             transform: translateY(-10px);
             border-color: var(--accent);
-            box-shadow: 0 30px 80px rgba(0, 212, 255, 0.2);
+            box-shadow:
+                0 0 40px rgba(0, 212, 255, 0.6),
+                0 0 80px rgba(112, 0, 255, 0.4),
+                0 30px 80px rgba(0, 212, 255, 0.3);
         }
 
         .project-visual {
@@ -846,6 +863,13 @@
             opacity: 0.4;
             perspective: 1000px;
             user-select: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .floating-3d.dragging {
+            opacity: 0.8;
+            transform: scale(1.2);
+            filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.8));
         }
 
         @media (max-width: 1440px) {
@@ -1447,6 +1471,7 @@
         floating3d.addEventListener('mousedown', (e) => {
             isDragging = true;
             floating3d.style.cursor = 'grabbing';
+            floating3d.classList.add('dragging');
             dragStartX = e.clientX;
             dragStartY = e.clientY;
 
@@ -1478,15 +1503,20 @@
                 isDragging = false;
                 floating3d.style.cursor = 'grab';
 
-                // Animate back to original position
-                floating3d.style.transition = 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                // Remove dragging class with slight delay for smooth transition
+                setTimeout(() => {
+                    floating3d.classList.remove('dragging');
+                }, 100);
+
+                // Magnet flow-back animation - smoother, more fluid
+                floating3d.style.transition = 'left 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55), top 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55), right 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
                 floating3d.style.left = 'auto';
                 floating3d.style.right = `${currentX}%`;
                 floating3d.style.top = `${currentY}%`;
 
                 setTimeout(() => {
-                    floating3d.style.transition = 'none';
-                }, 800);
+                    floating3d.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                }, 1200);
             }
         });
 
