@@ -1513,8 +1513,9 @@
                 const cubeWidthPercent = (cubeWidth / window.innerWidth) * 100;
                 const targetLeft = 100 - currentX - cubeWidthPercent;
 
-                // Set transition for smooth travel-back
-                floating3d.style.transition = 'left 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55), top 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.3s ease, transform 0.3s ease';
+                // Set transition for smooth, bouncy travel-back
+                // Using longer duration and elastic easing for smooth, bouncy effect
+                floating3d.style.transition = 'left 1.8s cubic-bezier(0.34, 1.56, 0.64, 1), top 1.8s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease, transform 0.3s ease';
 
                 // Use requestAnimationFrame to ensure transition is applied
                 requestAnimationFrame(() => {
@@ -1535,7 +1536,7 @@
                     setTimeout(() => {
                         floating3d.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
                     }, 50);
-                }, 1200);
+                }, 1800);
             }
         });
 
