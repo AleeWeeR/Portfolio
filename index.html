@@ -1508,12 +1508,19 @@
                     floating3d.classList.remove('dragging');
                 }, 100);
 
-                // Magnet flow-back animation - smoother, more fluid
-                floating3d.style.transition = 'left 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55), top 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55), right 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
-                floating3d.style.left = 'auto';
-                floating3d.style.right = `${currentX}%`;
-                floating3d.style.top = `${currentY}%`;
+                // Set transition first
+                floating3d.style.transition = 'left 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55), top 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55), right 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.3s ease, transform 0.3s ease';
 
+                // Use requestAnimationFrame to ensure transition is applied before changing properties
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        floating3d.style.left = 'auto';
+                        floating3d.style.right = `${currentX}%`;
+                        floating3d.style.top = `${currentY}%`;
+                    });
+                });
+
+                // Reset transition after animation completes
                 setTimeout(() => {
                     floating3d.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
                 }, 1200);
