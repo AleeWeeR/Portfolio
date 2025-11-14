@@ -485,7 +485,7 @@
         .bento-item {
             background: var(--surface-elevated);
             border: 1px solid var(--border);
-            border-radius: 24px;
+            border-radius: 20px;
             padding: 3rem;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
@@ -617,7 +617,7 @@
             scroll-snap-align: start;
             background: var(--surface-elevated);
             border: 1px solid var(--border);
-            border-radius: 24px;
+            border-radius: 20px;
             padding: 3rem;
             position: relative;
         }
@@ -630,7 +630,7 @@
             width: 4px;
             height: 100%;
             background: var(--gradient);
-            border-radius: 24px 0 0 24px;
+            border-radius: 20px 0 0 20px;
         }
 
         .timeline-date {
@@ -675,7 +675,7 @@
         .project-card {
             background: var(--surface-elevated);
             border: 1px solid var(--border);
-            border-radius: 24px;
+            border-radius: 20px;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
@@ -841,11 +841,11 @@
             top: 40%;
             width: 100px;
             height: 100px;
-            pointer-events: none;
             z-index: 100;
             transform-style: preserve-3d;
             opacity: 0.4;
             perspective: 1000px;
+            user-select: none;
         }
 
         @media (max-width: 1440px) {
@@ -1343,15 +1343,33 @@
             });
         });
 
-        // Smooth horizontal scroll for timeline
+        // Smooth horizontal scroll for timeline - only when hovering
         const timelineScroll = document.querySelector('.timeline-scroll');
+        let isHoveringTimeline = false;
+
         if (timelineScroll) {
-            timelineScroll.addEventListener('wheel', (e) => {
-                if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-                    e.preventDefault();
-                    timelineScroll.scrollLeft += e.deltaY;
-                }
+            timelineScroll.addEventListener('mouseenter', () => {
+                isHoveringTimeline = true;
             });
+
+            timelineScroll.addEventListener('mouseleave', () => {
+                isHoveringTimeline = false;
+            });
+
+            timelineScroll.addEventListener('wheel', (e) => {
+                // Only prevent default if actually hovering AND scrolling horizontally intentionally
+                if (isHoveringTimeline && timelineScroll.scrollWidth > timelineScroll.clientWidth) {
+                    const isScrollingHorizontally = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+                    const canScrollLeft = timelineScroll.scrollLeft > 0;
+                    const canScrollRight = timelineScroll.scrollLeft < (timelineScroll.scrollWidth - timelineScroll.clientWidth);
+
+                    // Only take over scroll if we're not at the edges or scrolling horizontally
+                    if (isScrollingHorizontally || (canScrollLeft && e.deltaY < 0) || (canScrollRight && e.deltaY > 0)) {
+                        e.preventDefault();
+                        timelineScroll.scrollLeft += e.deltaY;
+                    }
+                }
+            }, { passive: false });
         }
 
         // Smooth scroll for nav links
@@ -1395,27 +1413,93 @@
             }
         }
 
-        // 3D Floating Object - Smooth parallax
+        // 3D Floating Object - Smooth parallax with drag
         const floating3d = document.getElementById('floating3d');
         let scrollProgress = 0;
         let targetY = 40;
         let currentY = 40;
+        let targetX = 8;
+        let currentX = 8;
+        let isDragging = false;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        let cubeStartX = 0;
+        let cubeStartY = 0;
 
         // Smooth scroll-based movement
         window.addEventListener('scroll', () => {
-            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-            scrollProgress = window.scrollY / maxScroll;
+            if (!isDragging) {
+                const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                scrollProgress = window.scrollY / maxScroll;
 
-            // Gentle vertical movement (stays mostly centered)
-            targetY = 35 + (scrollProgress * 30); // Moves from 35% to 65% subtly
+                // Gentle vertical movement (stays mostly centered)
+                targetY = 35 + (scrollProgress * 30); // Moves from 35% to 65% subtly
+
+                // Add horizontal floating based on scroll
+                targetX = 5 + Math.sin(scrollProgress * Math.PI * 2) * 3; // Floats between 2% and 8%
+            }
+        });
+
+        // Drag functionality
+        floating3d.style.pointerEvents = 'auto';
+        floating3d.style.cursor = 'grab';
+
+        floating3d.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            floating3d.style.cursor = 'grabbing';
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+
+            // Get current position in pixels
+            const rect = floating3d.getBoundingClientRect();
+            cubeStartX = rect.left;
+            cubeStartY = rect.top;
+
+            e.preventDefault();
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const deltaX = e.clientX - dragStartX;
+                const deltaY = e.clientY - dragStartY;
+
+                // Update position during drag
+                const newX = ((cubeStartX + deltaX) / window.innerWidth) * 100;
+                const newY = ((cubeStartY + deltaY) / window.innerHeight) * 100;
+
+                floating3d.style.right = 'auto';
+                floating3d.style.left = `${newX}%`;
+                floating3d.style.top = `${newY}%`;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                floating3d.style.cursor = 'grab';
+
+                // Animate back to original position
+                floating3d.style.transition = 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                floating3d.style.left = 'auto';
+                floating3d.style.right = `${currentX}%`;
+                floating3d.style.top = `${currentY}%`;
+
+                setTimeout(() => {
+                    floating3d.style.transition = 'none';
+                }, 800);
+            }
         });
 
         // Smooth animation loop
         function animateFloating() {
-            // Lerp for smooth movement
-            currentY += (targetY - currentY) * 0.05;
+            if (!isDragging) {
+                // Lerp for smooth movement
+                currentY += (targetY - currentY) * 0.05;
+                currentX += (targetX - currentX) * 0.05;
 
-            floating3d.style.top = `${currentY}%`;
+                floating3d.style.top = `${currentY}%`;
+                floating3d.style.right = `${currentX}%`;
+            }
 
             requestAnimationFrame(animateFloating);
         }
